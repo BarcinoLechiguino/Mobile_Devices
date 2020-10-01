@@ -1,0 +1,13 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "dispositius",
+      "rootUri": "../",
+      "packageUri": "lib/"
+    }
+  ],
+  "generated": "2020-10-01T09:09:40.034275Z",
+  "generator": "pub",
+  "generatorVersion": "2.9.2"
+}
