@@ -1,0 +1,17 @@
+{
+    "title": "Spanish Omelette",
+    "minutes": 50,
+    "ingredients": 
+    [
+        {
+            "name": "Potatoes",
+            "amount": "1",
+            "units": "kg"
+        },
+        {
+            "name": "Eggs",
+            "amount": "5",
+            "units": "egg"
+        }
+    ]
+}
