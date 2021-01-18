@@ -1,66 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
 
-Future<void> main() async 
+void main()
 {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(FirebaseApp());
 }
 
-class MyApp extends StatelessWidget 
-{
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) 
-  {
-    return MaterialApp(title: 'Flutter Demo', home: HomePage(), );
-  }
-}
-
-class HomePage extends StatelessWidget 
+class FirebaseApp extends StatelessWidget
 {
   @override
-  Widget build(BuildContext context) 
+  Widget build(BuildContext context)
   {
-    final db = FirebaseFirestore.instance;
-
-    return Scaffold(
-      appBar: AppBar(title: Text('User List')),
-      body: StreamBuilder(
-        stream: db
-            .collection('users')
-            //.where('age', isGreaterThan: 26)
-            //.orderBy('last_name')
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) 
-        {
-          if (!snapshot.hasData) 
+    return MaterialApp(
+      title: "Flutter Firebase",
+      home: Scaffold(
+        appBar: AppBar(title: Text('To-Dos Firebase')),
+        body: StreamBuilder(
+          stream: Firestore.instance.collection('to_dos').snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot)
           {
-            return Center(child: CircularProgressIndicator());
-          }
-          final users = snapshot.data.docs;
-
-          return ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (context, index) 
+            if (!snapshot.hasData)
             {
-              final user = users[index];
-              
-              return ListTile(
-                title: Text(
-                  '${user['first_name']} ${user['last_name']}',
-                ),
-                subtitle: Text(user['age'].toString()),
-                onLongPress: () 
-                {
-                  db.collection('users').doc(user.id).delete();
-                },
-              );
-            },
-          );
-        },
+              return Center(child: CircularProgressIndicator(), );
+            }
+
+            List<DocumentSnapshot> docs = snapshot.data.documents;
+
+            return ListView.builder(
+              itemCount: docs.length,
+              itemBuilder: (context, index)
+              {
+                Map<String, dynamic> data = docs[index].data;
+                
+                return ListTile(
+                  leading: Checkbox(value: data['done'], ),
+                  title: Text(data['what']),
+                );
+              }
+            );
+          }
+        )
       ),
     );
   }
